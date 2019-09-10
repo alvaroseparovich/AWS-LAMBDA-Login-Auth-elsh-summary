@@ -1,0 +1,31 @@
+service: get-summary
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: app.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: false
+package:
+  exclude:
+    - node_modules/**
+    - venv/**
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-east-1
+  iamRoleStatements: # permissions for all of your functions can be set here
+    - Effect: Allow
+      Action: # Gives permission to lambda in a specific region
+        - lambda:InvokeFunction
+      Resource: 'arn:aws:lambda:us-east-1:*:function:*'
+
+functions:
+  app:
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
