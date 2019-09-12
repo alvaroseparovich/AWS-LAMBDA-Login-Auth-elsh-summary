@@ -21,7 +21,7 @@ def login(username,password):
 
 app = Flask(__name__)
 
-@app.route("/",methods = ['POST'])
+@app.route("/sum",methods = ['POST'])
 def main():
     if not login( str(request.form.get('username')) , str(request.form.get('password')) ):
         return "Credenciais incorretas!!"
@@ -38,6 +38,9 @@ def main():
         return json.loads(json.loads(byteResponse)['body'])['message'] #summ(int(request.form.get('month')) , int(request.form.get('year')) )
     return render_template('index.html')
 
+@app.route("/")
+def home():
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run()
